@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Computer Fundamentals Quiz</title>
+  <style>
+    /* Reset & Base Styles */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 15px;
+      min-height: 100vh;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Container */
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    /* Header */
+    h1 {
+      text-align: center;
+      color: #5a67d8;
+      margin-bottom: 5px;
+      font-size: 1.5rem;
+    }
+    .subtitle {
+      text-align: center;
+      color: #718096;
+      margin-bottom: 25px;
+      font-size: 0.9rem;
+    }
+
+    /* Question Cards */
+    .question-card {
+      background: #f7fafc;
+      border-left: 5px solid #5a67d8;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 0 8px 8px 0;
+    }    .q-text {
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      color: #2d3748;
+    }
+
+    /* Options */
+    .options label {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      margin-bottom: 8px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .options label:hover {
+      background: #ebf4ff;
+      border-color: #5a67d8;
+    }
+    .options input[type="radio"] {
+      margin-right: 12px;
+      transform: scale(1.2);
+      accent-color: #5a67d8;
+    }
+
+    /* Button */
+    .submit-btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      background: #5a67d8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 4px 6px rgba(90, 103, 216, 0.3);
+    }
+    .submit-btn:active {
+      transform: scale(0.98);
+      background: #4c51bf;
+    }
+
+    /* Results Section */    #result-area {
+      display: none;
+      text-align: center;
+      margin-top: 25px;
+      padding: 20px;
+      background: #f0fff4;
+      border: 2px solid #9ae6b4;
+      border-radius: 10px;
+    }
+    .score-big {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #2f855a;
+      margin: 10px 0;
+    }
+    .feedback-msg {
+      font-size: 1.1rem;
+      color: #276749;
+      margin-bottom: 15px;
+    }
+    .retry-btn {
+      background: #764ba2;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    /* Mobile Optimization */
+    @media (max-width: 480px) {
+      .container { padding: 15px; }
+      h1 { font-size: 1.3rem; }
+      .q-text { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>💻 Computer Fundamentals</h1>
+    <p class="subtitle">20 Questions • Select the best answer</p>
+    
+    <form id="quiz-form">
+      <!-- Questions injected by JS -->
+    </form>
+
+    <button type="button" class="submit-btn" onclick="calculateScore()">Submit Quiz</button>
+    <div id="result-area">
+      <h2>Quiz Completed! 🎉</h2>
+      <div class="score-big" id="score-display">0/20</div>
+      <p class="feedback-msg" id="feedback-msg"></p>
+      <button class="retry-btn" onclick="location.reload()">Retake Quiz</button>
+    </div>
+  </div>
+
+  <script>
+    // Quiz Data: 20 Computer Fundamentals Questions
+    const questions = [
+      {
+        q: "1. What does CPU stand for?",
+        options: ["Central Process Unit", "Central Processing Unit", "Computer Personal Unit", "Central Processor Utility"],
+        ans: 1
+      },
+      {
+        q: "2. Which of these is an Input Device?",
+        options: ["Monitor", "Printer", "Keyboard", "Speaker"],
+        ans: 2
+      },
+      {
+        q: "3. What is the 'brain' of the computer?",
+        options: ["Hard Disk", "CPU", "RAM", "Mouse"],
+        ans: 1
+      },
+      {
+        q: "4. RAM stands for:",
+        options: ["Read Access Memory", "Random Access Memory", "Run Accept Memory", "Real Active Memory"],
+        ans: 1
+      },
+      {
+        q: "5. Which memory is volatile (loses data when power is off)?",
+        options: ["ROM", "Hard Drive", "RAM", "Flash Drive"],
+        ans: 2
+      },
+      {
+        q: "6. 1 Byte is equal to:",
+        options: ["4 bits", "8 bits", "16 bits", "32 bits"],
+        ans: 1
+      },
+      {
+        q: "7. Which of these is an Operating System?",
+        options: ["Google Chrome", "Microsoft Word", "Windows 10", "Intel"],
+        ans: 2
+      },
+      {
+        q: "8. What does GUI stand for?",
+        options: ["Gaming User Interface", "Graphical User Interface", "Global Unit Interface", "General Usage Internet"],
+        ans: 1      },
+      {
+        q: "9. Which device connects computers in a network?",
+        options: ["Router", "Scanner", "Plotter", "Microphone"],
+        ans: 0
+      },
+      {
+        q: "10. What is the full form of URL?",
+        options: ["Uniform Resource Locator", "Universal Resource Link", "Unified Remote Location", "User Resource Link"],
+        ans: 0
+      },
+      {
+        q: "11. Which key is used to 'Copy' selected text?",
+        options: ["Ctrl + V", "Ctrl + X", "Ctrl + C", "Ctrl + P"],
+        ans: 2
+      },
+      {
+        q: "12. SSD stands for:",
+        options: ["Solid State Drive", "Super Speed Disk", "Serial Storage Device", "System State Data"],
+        ans: 0
+      },
+      {
+        q: "13. Which of these is NOT a web browser?",
+        options: ["Firefox", "Chrome", "Excel", "Safari"],
+        ans: 2
+      },
+      {
+        q: "14. What does HTTP stand for?",
+        options: ["HyperText Transfer Protocol", "High Text Transfer Process", "HyperText Transmission Program", "Home Tool Transfer Protocol"],
+        ans: 0
+      },
+      {
+        q: "15. The physical parts of a computer are called:",
+        options: ["Software", "Hardware", "Malware", "Firmware"],
+        ans: 1
+      },
+      {
+        q: "16. Which component stores data permanently?",
+        options: ["RAM", "Cache", "Hard Disk", "Register"],
+        ans: 2
+      },
+      {
+        q: "17. What is the main function of an Antivirus?",
+        options: ["Speed up PC", "Protect from Malware", "Clean Screen", "Save Files"],
+        ans: 1
+      },
+      {
+        q: "18. LAN stands for:",
+        options: ["Large Area Network", "Local Area Network", "Long Access Node", "Legal Area Network"],
+        ans: 1      },
+      {
+        q: "19. Which shortcut key is used to 'Undo' an action?",
+        options: ["Ctrl + U", "Ctrl + Z", "Ctrl + Y", "Ctrl + A"],
+        ans: 1
+      },
+      {
+        q: "20. Who is known as the father of the computer?",
+        options: ["Alan Turing", "Charles Babbage", "Bill Gates", "Steve Jobs"],
+        ans: 1
+      }
+    ];
+
+    // Render Questions
+    const formContainer = document.getElementById('quiz-form');
+    
+    questions.forEach((item, index) => {
+      const card = document.createElement('div');
+      card.className = 'question-card';
+      
+      let optionsHTML = '';
+      item.options.forEach((opt, i) => {
+        optionsHTML += `
+          <label>
+            <input type="radio" name="q${index}" value="${i}">
+            ${opt}
+          </label>
+        `;
+      });
+
+      card.innerHTML = `
+        <div class="q-text">${item.q}</div>
+        <div class="options">${optionsHTML}</div>
+      `;
+      formContainer.appendChild(card);
+    });
+
+    // Calculate Score
+    function calculateScore() {
+      let score = 0;
+      let answered = 0;
+
+      questions.forEach((item, index) => {
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        if (selected) {
+          answered++;
+          if (parseInt(selected.value) === item.ans) {
+            score++;
+          }
+        }      });
+
+      // Simple validation
+      if (answered < questions.length) {
+        if(!confirm(`You have answered ${answered} out of ${questions.length} questions. Submit anyway?`)) {
+          return;
+        }
+      }
+
+      // Show Results
+      const resultArea = document.getElementById('result-area');
+      const scoreDisplay = document.getElementById('score-display');
+      const feedbackMsg = document.getElementById('feedback-msg');
+      const submitBtn = document.querySelector('.submit-btn');
+
+      submitBtn.style.display = 'none'; // Hide submit button
+      resultArea.style.display = 'block'; // Show results
+      scoreDisplay.textContent = `${score} / ${questions.length}`;
+
+      // Feedback Logic
+      const percentage = (score / questions.length) * 100;
+      if (percentage === 100) {
+        feedbackMsg.textContent = "🌟 Perfect Score! You are a Computer Wizard!";
+      } else if (percentage >= 80) {
+        feedbackMsg.textContent = "👏 Excellent work! You know your stuff.";
+      } else if (percentage >= 50) {
+        feedbackMsg.textContent = "👍 Good job! Keep studying to improve.";
+      } else {
+        feedbackMsg.textContent = "📚 Keep practicing! Review the basics and try again.";
+      }
+
+      // Scroll to bottom
+      resultArea.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
